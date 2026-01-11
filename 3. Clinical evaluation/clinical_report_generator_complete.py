@@ -24,7 +24,7 @@ class ClinicalReportGenerator:
         if output_base_dir is None:
             # Create timestamped directory
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            output_base_dir = f"D:/MAMA-MIA/report_generation_{timestamp}"
+            output_base_dir = f"_{timestamp}"
         
         self.output_base_dir = output_base_dir
         self._init_directories()
@@ -993,7 +993,7 @@ def main():
     """Main execution function"""
     
     # Configuration
-    DATA_PATH = r'D:\MAMA-MIA\clinical_and_imaging_info.xlsx'
+    DATA_PATH = r''
     SHEET_NAME = 'dataset_info'
     
     print("="*80)
@@ -1091,4 +1091,5 @@ if __name__ == "__main__":
         print("\n❌ Generation failed. Please check the error messages above.")
     
     # Keep window open
+
     input("\nPress Enter to exit...")
