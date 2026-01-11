@@ -7,3 +7,51 @@ The analysis is based on the MAMA-MIA (Multi-center Assessment of MRI for Adjuva
   To reproduce the dataset analysis report, run:
         python analyze_mama_mia.py
   The script will generate/update the MAMA-MIA_Dataset_Analysis_Report.txt file in the same directory.
+
+2. Functional Tumor Volume Generation：
+  To generate "Functional Tumor Volumes (FTV)", run:
+        python FTV_generate.py
+  This script processes DCE-MRI sequences from the MAMA-MIA dataset to generate "Functional Tumor Volumes (FTV)" based on vascular kinetics.
+
+  Key Features:
+    I. "Intelligent Phase Selection"
+       - Automatically identifies the dataset source from patient IDs (DUKE, ISPY1, ISPY2, NACT)
+       - Selects optimal time points for each dataset type based on acquisition protocols
+    II. "Dual FTV Generation"
+       - FTV_PE: Voxels with early percent enhancement (PE) ≥ 70%
+       - FTV_SER: Voxels with PE ≥ 70% AND signal enhancement ratio (SER) ≥ 0.9
+       - Both include 3D connectivity filtering (minimum 5 connected voxels)
+    III. "Novel Feature: FTV with Original Signal Intensity"
+       - Generates FTV images preserving the original T1-weighted signal values
+       - Produces both binary masks and intensity-preserving versions:
+         - `{patient_id}_FTV_PE_T1.nii.gz`: FTV_PE regions with original S1 intensities
+         - `{patient_id}_FTV_SER_T1.nii.gz`: FTV_SER regions with original S1 intensities
+    IV. "Comprehensive Analysis Outputs"
+       - Quantitative metrics (JSON files)
+       - Six professional visualizations:
+         - DCE-MRI temporal sequences
+         - FTV generation pipeline
+         - Vascular kinetic analysis
+         - Feature space analysis
+         - Volume statistics
+         - Tumor heterogeneity
+       - 3D interactive HTML visualizations
+       - Dataset-level summary statistics
+    V. Output Structure:
+        
+        processed_patients/
+        ├── {patient_id}/
+        │ ├── {patient_id}_FTV_PE.nii.gz # Binary FTV_PE mask
+        │ ├── {patient_id}_FTV_SER.nii.gz # Binary FTV_SER mask
+        │ ├── {patient_id}_FTV_PE_T1.nii.gz # FTV_PE with original intensity
+        │ ├── {patient_id}_FTV_SER_T1.nii.gz # FTV_SER with original intensity
+        │ ├── {patient_id}_PE_early.nii.gz # Percent enhancement map
+        │ ├── {patient_id}_SER.nii.gz # SER map
+        │ ├── {patient_id}_FTV_intensity_stats.json # Intensity statistics
+        │ ├── {patient_id}_metrics.json # Quantitative metrics
+        │ ├── {patient_id}_01_sequence.png # Visualization 1
+        │ ├── ... (other visualization files)
+        │ └── {patient_id}_3d_distribution.html # 3D interactive plot
+        ├── overall_statistics.json # Dataset-level summary
+        └── dataset_summary.png # Summary visualization
+    
