@@ -90,8 +90,8 @@ class MAMAMIADataset(Dataset):
     """
     
     def __init__(self, 
-                 data_dir: str = "/root/autodl-tmp/Lty/MAMA_MIA/data/",
-                 seg_dir: str = "/root/autodl-tmp/Lty/MAMA_MIA/segmentations_expert/",
+                 data_dir: str = "",
+                 seg_dir: str = "",
                  datasets: List[str] = ["DUKE", "NACT", "ISPY1", "ISPY2"],
                  mode: str = "train",
                  train_ratio: float = 0.7,
@@ -101,8 +101,8 @@ class MAMAMIADataset(Dataset):
                  seed: int = 42,
                  # 【新增】多模态参数
                  multimodal: bool = False,
-                 ser_dir: str = "/root/autodl-tmp/Lty/MAMA_MIA/data_FTV_SER_T1/",
-                 pe_dir: str = "/root/autodl-tmp/Lty/MAMA_MIA/data_FTV_PE_T1/",
+                 ser_dir: str = "",
+                 pe_dir: str = "",
                  # 【新增】跨数据集测试模式
                  cross_dataset_test: bool = False):
         """
@@ -385,8 +385,8 @@ class MAMAMIADataset2D(Dataset):
     """
     
     def __init__(self, 
-                 data_dir: str = "/root/autodl-tmp/Lty/MAMA_MIA/data/",
-                 seg_dir: str = "/root/autodl-tmp/Lty/MAMA_MIA/segmentations_expert/",
+                 data_dir: str = "",
+                 seg_dir: str = "",
                  datasets: List[str] = ["DUKE", "NACT", "ISPY1", "ISPY2"],
                  mode: str = "train",
                  slice_axis: int = 2,  # 切片轴: 0=sagittal, 1=coronal, 2=axial
@@ -395,8 +395,8 @@ class MAMAMIADataset2D(Dataset):
                  seed: int = 42,
                  # 【新增】多模态参数
                  multimodal: bool = False,
-                 ser_dir: str = "/root/autodl-tmp/Lty/MAMA_MIA/data_FTV_SER_T1/",
-                 pe_dir: str = "/root/autodl-tmp/Lty/MAMA_MIA/data_FTV_PE_T1/",
+                 ser_dir: str = "",
+                 pe_dir: str = "",
                  # 【新增】跨数据集测试模式
                  cross_dataset_test: bool = False,
                  # 【新增】平衡采样参数
@@ -544,4 +544,5 @@ def save_prediction_as_nifti(prediction: np.ndarray, reference_nifti_path: str,
     output_file = os.path.join(output_path, f"{patient_id}_pred.nii.gz")
     nib.save(pred_img, output_file)
     
+
     print(f"Prediction saved: {output_file}")
