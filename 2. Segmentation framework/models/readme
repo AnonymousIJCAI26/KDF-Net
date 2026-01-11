@@ -1,1 +1,18 @@
+This directory contains all neural network architectures used in the study, organized into three categories:
 
+1. Backbone Network：
+    UltraLight_VM_UNet.py (2025)
+
+2. Proposed Model (KDF-Net)：
+    ultralight_vm_unet_enhanced.py
+    dynamic_modal_fusion.py
+
+3. Baseline Models：
+    baseline_unet.py (2015)
+    baseline_fcn.py (2015)
+    baseline_attention_unet.py (2018)
+    baseline_deeplabv3.py (2018)
+    baseline_unet_plusplus.py (2020)
+    baseline_nnunet.py (2021)
+    baseline_swin_unet.py (2023)
+    baseline_transunet.py (2024)
