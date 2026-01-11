@@ -9,10 +9,10 @@ class MamaMiaConfig:
     datasets = 'MAMA_MIA'
     
     # ==================== 数据路径 ====================
-    data_dir = '/root/Lty/MAMA-MIA/data/'
-    seg_dir = '/root/Lty/MAMA-MIA/segmentations_expert/'
-    ser_dir = '/root/Lty/MAMA-MIA/data_FTV_SER_T1/'
-    pe_dir = '/root/Lty/MAMA-MIA/data_FTV_PE_T1/'
+    data_dir = ''
+    seg_dir = ''
+    ser_dir = ''
+    pe_dir = ''
     
     # ==================== 使用的数据集 ====================
     datasets_list = ['DUKE', 'NACT', 'ISPY1', 'ISPY2']
@@ -550,4 +550,5 @@ if __name__ == "__main__":
     else:
         print(f"\n❌ Baseline configuration is invalid: {error_msg}")
     
+
     print("\n✨ Configuration test completed successfully!")
