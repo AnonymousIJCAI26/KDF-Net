@@ -4,7 +4,7 @@ from collections import defaultdict
 from datetime import datetime
 
 # 数据集根目录路径
-DATA_ROOT = r"D:\MAMA-MIA\data"
+DATA_ROOT = r""
 
 # 输出文档路径
 OUTPUT_DOC = os.path.join(DATA_ROOT, "MAMA-MIA_Dataset_Analysis_Report.txt")
@@ -109,4 +109,5 @@ def analyze_dataset():
     print(f"分析完成！结果已保存到：{OUTPUT_DOC}")
 
 if __name__ == "__main__":
+
     analyze_dataset()
