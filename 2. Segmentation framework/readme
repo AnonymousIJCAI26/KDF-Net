@@ -1,1 +1,33 @@
+Models and Training Framework：
 
+This directory contains all neural network architectures and the complete training/evaluation framework for the proposed KDF-Net.
+
+Directory Structure：
+
+1. models:
+    "backbone" - Foundational feature extraction architectures
+    "kdfnet" - Implementation of the proposed "KDF-Net" (Knowledge-aware Dynamic Fusion Network)
+    "baselines" - Comparison methods and baseline models
+
+2.  Main Implementation Scripts:
+  
+  I. Configuration & Data Handling:
+     "config_setting_mama_mia.py" - Configuration settings for the MAMA-MIA dataset
+     "mama_mia_dataset.py" - Dataset class for MAMA-MIA data
+     "mama_mia_loader.py" - Data loading utilities
+
+  II. Training & Evaluation:
+    "cross_validation.py" - Main training script (5-fold cross-validation)
+    "test_cross_validation.py" - Testing script for cross-validation results
+    "engine.py" - Core training/evaluation engine with training loops
+
+  III. Utilities:
+    "utils.py" - Helper functions (metrics, logging, visualization)
+
+3. Training:
+    To train the model using 5-fold cross-validation:
+        python cross_validation.py 
+
+4. Testing:
+    To evaluate the trained model:
+        python test_cross_validation.py 
