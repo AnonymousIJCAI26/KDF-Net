@@ -1,1 +1,29 @@
+Clinical Evaluation：
 
+1. Tumor VOI Generation：
+      python generate_VOI.py
+  This script extracts "Volumes of Interest (VOI)" from the multi-channel imaging data for downstream clinical analysis.
+
+  I. Key Features:
+    "Multi-Channel Volume Creation": Combines T1-weighted, FTV_PE, and FTV_SER images into a unified 3-channel volume
+    "Intensity Normalization": Z-score normalization for each channel
+    "VOI Extraction": Automatically extracts tumor regions based on ground truth segmentations
+    "Spatial Alignment Verification": Ensures all input images are properly aligned
+
+  II. Outputs:
+    "multichannel_volumes": Complete 3-channel volumes for each patient
+    "tumor_vois": Extracted VOIs for tumor regions with 10-voxel margins
+
+2. Clinical Report Generation:
+      python clinical_report_generator_complete.py
+  This script generates structured clinical reports and BERT-ready text from clinical metadata for natural language processing.
+
+  Output Structure:
+    output_directory/
+    ├── structured_reports/           # CSV of all clinical reports
+    ├── bert_texts/                   # BERT corpus and text index
+    ├── bert_individual_files/        # Individual patient text files
+    ├── visualizations/               # Statistical plots (PNG)
+    ├── latex_tables/                 # LaTeX tables for paper
+    ├── statistics/                   # CSV statistics files
+    └── metadata/                     # Generation metadata (JSON)
