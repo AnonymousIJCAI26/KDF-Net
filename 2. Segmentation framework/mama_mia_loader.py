@@ -26,8 +26,8 @@ class MAMAMIADataLoader:
             mode='train',
             input_channels=self.config.input_channels,
             multimodal=self.config.multimodal,
-            ser_dir=getattr(self.config, 'ser_dir', '/root/autodl-tmp/Lty/MAMA_MIA/data_FTV_SER_T1/'),
-            pe_dir=getattr(self.config, 'pe_dir', '/root/autodl-tmp/Lty/MAMA_MIA/data_FTV_PE_T1/'),
+            ser_dir=getattr(self.config, 'ser_dir', ''),
+            pe_dir=getattr(self.config, 'pe_dir', ''),
             transform=transform,  # 【新增】传递数据增广
             balanced_sampling=getattr(self.config, 'balanced_sampling', True)  # 【新增】平衡采样
         )
@@ -62,8 +62,8 @@ class MAMAMIADataLoader:
             mode='val',
             input_channels=self.config.input_channels,
             multimodal=self.config.multimodal,
-            ser_dir=getattr(self.config, 'ser_dir', '/root/autodl-tmp/Lty/MAMA_MIA/data_FTV_SER_T1/'),
-            pe_dir=getattr(self.config, 'pe_dir', '/root/autodl-tmp/Lty/MAMA_MIA/data_FTV_PE_T1/'),
+            ser_dir=getattr(self.config, 'ser_dir', ''),
+            pe_dir=getattr(self.config, 'pe_dir', ''),
             balanced_sampling=False  # 【新增】验证集不需要平衡采样
         )
         
@@ -92,8 +92,8 @@ class MAMAMIADataLoader:
             mode='test',
             input_channels=self.config.input_channels,
             multimodal=self.config.multimodal,
-            ser_dir=getattr(self.config, 'ser_dir', '/root/autodl-tmp/Lty/MAMA_MIA/data_FTV_SER_T1/'),
-            pe_dir=getattr(self.config, 'pe_dir', '/root/autodl-tmp/Lty/MAMA_MIA/data_FTV_PE_T1/'),
+            ser_dir=getattr(self.config, 'ser_dir', ''),
+            pe_dir=getattr(self.config, 'pe_dir', ''),
             cross_dataset_test=getattr(self.config, 'cross_dataset_test', False),
             balanced_sampling=False  # 【新增】测试集不需要平衡采样
         )
@@ -108,4 +108,5 @@ class MAMAMIADataLoader:
             num_workers=self.config.num_workers,
             pin_memory=True,
             drop_last=True
+
         )
