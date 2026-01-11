@@ -193,13 +193,13 @@ def parse_args():
                        help='Datasets to use for testing, e.g., DUKE NACT ISPY1 ISPY2')
     parser.add_argument('--input_channels', type=int, default=1, 
                        help='Input channels')
-    parser.add_argument('--data_dir', type=str, default='/root/autodl-tmp/Lty/MAMA_MIA/data/', 
+    parser.add_argument('--data_dir', type=str, default='', 
                        help='Data directory')
-    parser.add_argument('--seg_dir', type=str, default='/root/autodl-tmp/Lty/MAMA_MIA/segmentations_expert/', 
+    parser.add_argument('--seg_dir', type=str, default='', 
                        help='Segmentation directory')
-    parser.add_argument('--ser_dir', type=str, default='/root/autodl-tmp/Lty/MAMA_MIA/data_FTV_SER_T1/', 
+    parser.add_argument('--ser_dir', type=str, default='', 
                        help='SER directory')
-    parser.add_argument('--pe_dir', type=str, default='/root/autodl-tmp/Lty/MAMA_MIA/data_FTV_PE_T1/', 
+    parser.add_argument('--pe_dir', type=str, default='', 
                        help='PE directory')
     parser.add_argument('--num_workers', type=int, default=2, 
                        help='Number of data loading workers')
@@ -1353,4 +1353,5 @@ def main():
         print(f"   - Analysis: {'✅ GENERATED' if args.analyze_fusion else '❌ NOT GENERATED'}")
 
 if __name__ == '__main__':
+
     main()
