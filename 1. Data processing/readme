@@ -1,1 +1,9 @@
+This directory contains scripts for data preparation and analysis of the multimodal MRI dataset used in the study.
 
+Dataset: MAMA-MIA
+The analysis is based on the MAMA-MIA (Multi-center Assessment of MRI for Adjuvant Therapy in Breast Cancer) dataset, a multi-center collection curated from four public cohorts: DUKE, NACT, ISPY1, and ISPY2. The dataset comprises 1,506 patients with dynamic contrast-enhanced magnetic resonance imaging (DCE-MRI) sequences and corresponding clinical/annotation records.
+
+1. Dataset Analysis：
+  To reproduce the dataset analysis report, run:
+        python analyze_mama_mia.py
+  The script will generate/update the MAMA-MIA_Dataset_Analysis_Report.txt file in the same directory.
