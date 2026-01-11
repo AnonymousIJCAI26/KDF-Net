@@ -1,4 +1,4 @@
-# KDF-Net: Integrating Knowledge as First-Class Inputs via Dynamic Fusion
+# KDF-Net: Integrating Knowledge as First-Class Inputs via Dynamic Fusion for Interpretable Breast Tumor Analysis
 
 ## architecture
 
