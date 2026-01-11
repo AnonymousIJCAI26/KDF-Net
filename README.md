@@ -2,4 +2,4 @@
 
 ## architecture
 
-![KDF-Net pipeline](./image/Figure2.png)
+![KDF-Net pipeline](./images/Figure_2.png)
