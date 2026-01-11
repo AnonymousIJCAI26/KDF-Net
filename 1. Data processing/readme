@@ -38,7 +38,6 @@ The analysis is based on the MAMA-MIA (Multi-center Assessment of MRI for Adjuva
        - 3D interactive HTML visualizations
        - Dataset-level summary statistics
     V. Output Structure:
-        
         processed_patients/
         ├── {patient_id}/
         │ ├── {patient_id}_FTV_PE.nii.gz # Binary FTV_PE mask
