@@ -506,10 +506,10 @@ class BreastCancerVOIExtractor:
 
 def main():
     """主函数"""
-    T1_ROOT = r"D:\MAMA-MIA\data"
-    PK_ROOT = r"D:\MAMA-MIA\ftv_analysis_results_new"
-    GT_ROOT = r"D:\MAMA-MIA\data_segmentations_ground_truth\segmentations_expert"
-    OUTPUT_ROOT = r"D:\MAMA-MIA\processed_data"
+    T1_ROOT = 
+    PK_ROOT = 
+    GT_ROOT = 
+    OUTPUT_ROOT = 
     
     # 创建提取器
     extractor = BreastCancerVOIExtractor(T1_ROOT, PK_ROOT, GT_ROOT, OUTPUT_ROOT)
@@ -537,4 +537,5 @@ if __name__ == "__main__":
     if response.lower() == 'y':
         main()
     else:
+
         print("请运行 test_single_patient() 函数测试单个患者")
