@@ -2,9 +2,7 @@ from datetime import datetime
 import os
 
 class MamaMiaConfig:
-    """MAMA-MIA数据集上的UltraLight VM-UNet配置"""
-    
-    # ==================== 基础设置 ====================
+
     network = 'UltraLight_VM_UNet_MAMA_MIA'
     datasets = 'MAMA_MIA'
     
@@ -552,3 +550,4 @@ if __name__ == "__main__":
     
 
     print("\n✨ Configuration test completed successfully!")
+
