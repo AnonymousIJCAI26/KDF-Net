@@ -51,6 +51,7 @@ Key dependencies for running KDF-Net:
 - matplotlib & seaborn - Visualization and plotting
 - tqdm - Progress bars
 - PyYAML - Configuration file handling
+
 For the complete list with exact versions, see requirements.txt.
 
 ## License
