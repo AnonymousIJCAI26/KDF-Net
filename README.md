@@ -40,5 +40,18 @@ Step 3: Clinical Evaluation (Clinical_evaluation/)
 - Clinical Validation: Closed-loop integration from segmentation to treatment response prediction
 - State-of-the-Art Performance: Demonstrated superior performance in tumor segmentation and pCR prediction
 
+## Requirements
+Key dependencies for running KDF-Net:
+- PyTorch (>=2.0.1) - Core deep learning framework
+- torchvision - Vision utilities
+- SimpleITK (>=2.3.1) & NiBabel (>=5.2.1) - Medical image processing
+- numpy & scipy - Scientific computing
+- pandas - Data manipulation and analysis
+- scikit-learn & scikit-image - Machine learning and image processing
+- matplotlib & seaborn - Visualization and plotting
+- tqdm - Progress bars
+- PyYAML - Configuration file handling
+For the complete list with exact versions, see requirements.txt.
+
 ## License
 This code is released for academic research purposes only.
