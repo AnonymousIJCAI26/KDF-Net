@@ -1,5 +1,5 @@
 """
-五折交叉验证脚本 - 修复版本（适配修改后的baseline模型）
+五折交叉验证脚本
 """
 
 import os
@@ -18,14 +18,11 @@ import time
 import warnings
 warnings.filterwarnings('ignore', message='upsample_bilinear2d_backward_out_cuda')
 
-# 导入现有模块
 from utils import set_seed, get_logger, seed_data_loader, BceDiceLoss, get_optimizer, get_scheduler
 from config_setting_mama_mia import MamaMiaConfig
 from mama_mia_loader import MAMAMIADataLoader
 from engine import train_one_epoch, val_one_epoch, test_one_epoch
 
-# ==================== 【新增导入】 ====================
-# 导入增强版模型
 try:
     from models.ultralight_vm_unet_enhanced import create_ultralight_model
     USE_ENHANCED_MODEL = True
@@ -42,7 +39,6 @@ try:
 except ImportError:
     HAS_THOP = False
     print("⚠️ thop module not found, cannot calculate FLOPs")
-# ==================== 【新增结束】 ====================
 
 from mama_mia_dataset import MAMAMIADataset2D, MAMAMIAMultiModalAugmentation
 
@@ -71,7 +67,6 @@ def parse_args():
     parser.add_argument('--input_channels', type=int, default=1, 
                        help='输入通道数')
     
-    # ==================== 【新增参数】 ====================
     # 动态融合参数
     parser.add_argument('--enable_fusion', action='store_true', 
                        help='Enable dynamic modal fusion (requires multimodal)')
@@ -80,7 +75,6 @@ def parse_args():
     parser.add_argument('--test_weight_method', type=str, default='historical_mean',
                        choices=['current', 'historical_mean', 'historical_median', 'last'],
                        help='Test weight selection method for dynamic fusion')
-    # ==================== 【新增结束】 ====================
     
     # 训练配置
     parser.add_argument('--epochs', type=int, default=100, help='每折训练的epoch数')
@@ -142,7 +136,7 @@ class MAMAMIADatasetCV(MAMAMIADataset2D):
 
 
 class KFoldSplitter:
-    """五折交叉验证数据分割器 - 修复版本"""
+    """五折交叉验证数据分割器"""
     
     def __init__(self, dataset, n_splits=5, seed=42, show_progress=True):
         self.dataset = dataset
@@ -354,7 +348,7 @@ def create_cross_validation_datasets(config, fold_splitter, fold_idx):
 
 
 def create_model_by_type(model_type, config):
-    """根据模型类型创建模型 - 适配修改后的baseline模型"""
+    """根据模型类型创建模型"""
     print(f"正在创建 {model_type.upper()} 模型...")
     
     # 导入需要的模块
@@ -401,7 +395,6 @@ def create_model_by_type(model_type, config):
                     model_type_display = "UltraLight VM-UNet (增强版不可用)"
                 print(f"  ✅ 你的增强模型")
         
-        # ==================== 【标准模型 - 不再传递c_list参数】 ====================
         elif model_type == 'unet':
             # 标准UNet - 使用默认配置
             from baseline_unet import Baseline_UNet
@@ -631,7 +624,6 @@ def train_fold(config, train_loader, val_loader, fold_idx, k_folds, work_dir):
             val_loader, model, criterion, epoch, logger, config
         )
         
-        # ==================== 【新增】融合分析（每10个epoch） ====================
         if hasattr(config, 'enable_fusion') and config.enable_fusion and USE_ENHANCED_MODEL and epoch % 10 == 0:
             try:
                 if hasattr(model.module, 'analyze_fusion'):
@@ -647,7 +639,6 @@ def train_fold(config, train_loader, val_loader, fold_idx, k_folds, work_dir):
                             print(f"  PE weight: {weights['PE_mean']:.3f} ± {weights['PE_std']:.3f}")
             except Exception as e:
                 print(f"⚠️ Fusion analysis failed: {e}")
-        # ==================== 【新增结束】 ====================
         
         # 【修改】保存最佳模型 - 基于Dice分数
         if val_dice > best_val_dice:
@@ -656,7 +647,7 @@ def train_fold(config, train_loader, val_loader, fold_idx, k_folds, work_dir):
             best_epoch = epoch
             
             # 保存模型
-            model_path = os.path.join(checkpoint_dir, f'best-epoch{epoch}-dice{val_dice:.4f}.pth')  # 【修改】文件名包含dice
+            model_path = os.path.join(checkpoint_dir, f'best-epoch{epoch}-dice{val_dice:.4f}.pth')  
             
             # 清理state_dict - 与train_mama_mia_ultralight.py保持一致
             def clean_state_dict(state_dict):
@@ -678,10 +669,10 @@ def train_fold(config, train_loader, val_loader, fold_idx, k_folds, work_dir):
                 'model_state_dict': clean_state_dict(model.module.state_dict()),
                 'optimizer_state_dict': optimizer.state_dict(),
                 'val_loss': val_loss,
-                'val_dice': val_dice,  # 【新增】保存Dice分数
+                'val_dice': val_dice, 
                 'train_loss': train_loss,
                 'model_type': config.model_type,
-                'model_type_display': model_type_display,  # 保存显示名称
+                'model_type_display': model_type_display,  
                 'complexity_info': complexity_info
             }, model_path)
             
@@ -700,10 +691,10 @@ def train_fold(config, train_loader, val_loader, fold_idx, k_folds, work_dir):
     return {
         'fold_idx': fold_idx + 1,
         'best_epoch': best_epoch,
-        'best_val_dice': best_val_dice,  # 【修改】返回best_val_dice
+        'best_val_dice': best_val_dice,  
         'best_val_loss': best_val_loss,
         'fold_dir': fold_dir,
-        'best_model_path': os.path.join(checkpoint_dir, f'best-epoch{best_epoch}-dice{best_val_dice:.4f}.pth'),  # 【修改】返回基于dice的路径
+        'best_model_path': os.path.join(checkpoint_dir, f'best-epoch{best_epoch}-dice{best_val_dice:.4f}.pth'),  
         'model_type': model_type_display,
         'complexity_info': complexity_info
     }
@@ -766,19 +757,15 @@ def main():
     print(f"折数: {args.k_folds}")
     print(f"随机种子: {args.seed}")
     print(f"多模态: {args.multimodal}")
-    
-    # ==================== 【重要修复】显示模型类型 ====================
     print(f"模型类型: {args.model.upper()}")
-    # ==================== 【修复结束】 ====================
     
-    # ==================== 【新增】显示融合配置 ====================
     if args.multimodal and args.enable_fusion:
         print("🎯 Dynamic Modal Fusion: ✅ ENABLED")
         print(f"   - Test weight method: {args.test_weight_method}")
         print(f"   - Verbose mode: {'✅ ON' if args.fusion_verbose else '❌ OFF'}")
     elif args.multimodal:
         print("🎯 Dynamic Modal Fusion: ❌ DISABLED")
-    # ==================== 【新增结束】 ====================
+
     
     print(f"训练epoch: {args.epochs}")
     if args.cross_dataset_test and args.test_datasets:
@@ -806,7 +793,6 @@ def main():
         threshold=0.5
     )
     
-    # ==================== 【重要修复】确保 model_type 正确传递 ====================
     # 双重确保 model_type 被正确设置
     config.model_type = args.model
     print(f"配置中的模型类型: {config.model_type.upper()}")
@@ -817,17 +803,14 @@ def main():
         print(f"多模态输入，设置 input_channels=3")
     else:
         print(f"单模态输入，使用 input_channels={config.input_channels}")
-    # ==================== 【修复结束】 ====================
     
     # 更新配置
     config.use_augmentation = args.use_augmentation
     config.balanced_sampling = args.balanced_sampling
     
-    # ==================== 【新增】传递融合参数 ====================
     config.enable_fusion = args.enable_fusion
     config.fusion_verbose = args.fusion_verbose
     config.test_weight_method = args.test_weight_method
-    # ==================== 【新增结束】 ====================
     
     # 设置工作目录
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -881,33 +864,7 @@ def main():
     
     # 存储结果
     fold_results = []
-    
-    # 进行五折交叉验证
-    # for fold_idx in range(args.k_folds):
-    #     print(f"\n{'='*60}")
-    #     print(f"开始处理第 {fold_idx + 1}/{args.k_folds} 折")
-    #     print(f"{'='*60}")
-        
-    #     # 创建当前折的数据加载器
-    #     train_loader, val_loader = create_cross_validation_datasets(
-    #         config, fold_splitter, fold_idx
-    #     )
-        
-    #     # 检查数据加载器是否为空
-    #     if train_loader is None or val_loader is None:
-    #         print(f"跳过折 {fold_idx}，因为数据加载器创建失败")
-    #         continue
-        
-    #     # 训练当前折
-    #     fold_info = train_fold(
-    #         config, train_loader, val_loader, 
-    #         fold_idx, args.k_folds, config.work_dir
-    #     )
-        
-    #     # 保存结果
-    #     fold_results.append(fold_info)
-    
-    # ==================== 【新增】确定要训练的折数 ====================
+
     if args.fold_indices is None:
         # 如果没有指定，训练所有折
         folds_to_train = list(range(args.k_folds))
@@ -925,7 +882,6 @@ def main():
         return
     
     print(f"将训练以下折: {folds_to_train}")
-    # ==================== 【新增结束】 ====================
     
     # 进行五折交叉验证（仅训练指定的折）
     for fold_idx in folds_to_train:
@@ -969,11 +925,9 @@ def main():
             input_channels=args.input_channels,
             cross_dataset_test=True,
             num_workers=args.num_workers,
-            # ==================== 【新增】传递融合参数 ====================
             enable_fusion=args.enable_fusion,
             fusion_verbose=args.fusion_verbose,
             test_weight_method=args.test_weight_method
-            # ==================== 【新增结束】 ====================
         )
         
         # 确保测试配置也有正确的模型类型
@@ -1163,4 +1117,5 @@ def main():
 
 
 if __name__ == '__main__':
+
     main()
