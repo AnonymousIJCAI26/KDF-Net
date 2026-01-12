@@ -12,20 +12,6 @@ import logging.handlers
 from matplotlib import pyplot as plt
 
 
-# def set_seed(seed):
-#     # for hash
-#     os.environ['PYTHONHASHSEED'] = str(seed)
-#     # for python and numpy
-#     random.seed(seed)
-#     np.random.seed(seed)
-#     # for cpu gpu
-#     torch.manual_seed(seed)
-#     torch.cuda.manual_seed(seed)
-#     torch.cuda.manual_seed_all(seed)
-#     # for cudnn
-#     cudnn.benchmark = False
-#     cudnn.deterministic = True
-
 def set_seed(seed):
     """
     设置完整的随机种子，确保实验可复现
@@ -267,38 +253,6 @@ def get_scheduler(config, optimizer):
     return scheduler
 
 
-
-# def save_imgs(img, msk, msk_pred, i, save_path, datasets, threshold=0.5, test_data_name=None):
-#     img = img.squeeze(0).permute(1,2,0).detach().cpu().numpy()
-#     img = img / 255. if img.max() > 1.1 else img
-#     if datasets == 'retinal':
-#         msk = np.squeeze(msk, axis=0)
-#         msk_pred = np.squeeze(msk_pred, axis=0)
-#     else:
-#         msk = np.where(np.squeeze(msk, axis=0) > 0.5, 1, 0)
-#         msk_pred = np.where(np.squeeze(msk_pred, axis=0) > threshold, 1, 0) 
-
-#     plt.figure(figsize=(7,15))
-
-#     plt.subplot(3,1,1)
-#     plt.imshow(img)
-#     plt.axis('off')
-
-#     plt.subplot(3,1,2)
-#     plt.imshow(msk, cmap= 'gray')
-#     plt.axis('off')
-
-#     plt.subplot(3,1,3)
-#     plt.imshow(msk_pred, cmap = 'gray')
-#     plt.axis('off')
-
-#     if test_data_name is not None:
-#         save_path = save_path + test_data_name + '_'
-#     plt.savefig(save_path + str(i) +'.png')
-#     plt.close()
-    
-
-
 class BCELoss(nn.Module):
     def __init__(self):
         super(BCELoss, self).__init__()
@@ -444,4 +398,5 @@ def save_imgs(img, msk, msk_pred, i, save_path, datasets, threshold=0.5, test_da
         filename += str(i)
         
     plt.savefig(os.path.join(save_path, f'{filename}.png'), dpi=150, bbox_inches='tight')
+
     plt.close()
