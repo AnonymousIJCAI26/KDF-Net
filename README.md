@@ -39,3 +39,6 @@ Step 3: Clinical Evaluation (Clinical_evaluation/)
 - Knowledge-Aware Fusion: Dynamically combines anatomical and pharmacokinetic information
 - Clinical Validation: Closed-loop integration from segmentation to treatment response prediction
 - State-of-the-Art Performance: Demonstrated superior performance in tumor segmentation and pCR prediction
+
+## License
+This code is released for academic research purposes only.
