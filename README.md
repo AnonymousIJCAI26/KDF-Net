@@ -11,11 +11,11 @@ KDF-Net introduces a novel paradigm shift from learning kinetics from data to se
 ## Methodology
 The framework achieves trustworthy AI in medical imaging through three key innovations:
 
-1. Knowledge-Guided Modality Synthesis (KGMS): Converts pharmacokinetic models into learnable image modalities (PE and SER maps)
+- Knowledge-Guided Modality Synthesis (KGMS): Converts pharmacokinetic models into learnable image modalities (PE and SER maps)
 
-2. Dynamic Cross-modal Synergy Module (DCSM): Performs voxel-wise, adaptive fusion of knowledge with anatomical features
+- Dynamic Cross-modal Synergy Module (DCSM): Performs voxel-wise, adaptive fusion of knowledge with anatomical features
 
-3. Closed-loop Validation: Links tumor segmentation directly to pathological complete response (pCR) prediction
+- Closed-loop Validation: Links tumor segmentation directly to pathological complete response (pCR) prediction
 
 ## Execution Pipeline
 Step 1: Data Processing (Data processing/)
@@ -33,3 +33,9 @@ Step 3: Clinical Evaluation (Clinical_evaluation/)
 - Clinical Report Generation: Automated generation of structured diagnostic reports
 - Training Framework: Full 5-fold cross-validation with closed-loop pCR prediction
 - Interpretability Analysis: Tools for visualizing attention maps aligned with clinical reasoning
+
+## Key Features
+- Interpretable by Design: Produces attention maps directly aligned with pharmacokinetic principles
+- Knowledge-Aware Fusion: Dynamically combines anatomical and pharmacokinetic information
+- Clinical Validation: Closed-loop integration from segmentation to treatment response prediction
+- State-of-the-Art Performance: Demonstrated superior performance in tumor segmentation and pCR prediction
