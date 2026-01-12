@@ -1,4 +1,3 @@
-# clinical_report_generator_fixed.py
 import pandas as pd
 import numpy as np
 from datetime import datetime
@@ -1093,3 +1092,4 @@ if __name__ == "__main__":
     # Keep window open
 
     input("\nPress Enter to exit...")
+
