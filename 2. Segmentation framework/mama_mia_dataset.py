@@ -8,9 +8,8 @@ import re
 from typing import List, Dict, Optional, Union
 from scipy.ndimage import zoom
 import random
-from torchvision.transforms import functional as F  # 【新增】用于旋转
+from torchvision.transforms import functional as F 
 
-# 【新增】多模态数据增广类
 class MAMAMIAMultiModalAugmentation:
     """专门为多模态MRI设计的数据增广"""
     
@@ -99,11 +98,9 @@ class MAMAMIADataset(Dataset):
                  input_channels: int = 1,
                  transform=None,
                  seed: int = 42,
-                 # 【新增】多模态参数
                  multimodal: bool = False,
                  ser_dir: str = "",
                  pe_dir: str = "",
-                 # 【新增】跨数据集测试模式
                  cross_dataset_test: bool = False):
         """
         Args:
@@ -129,11 +126,9 @@ class MAMAMIADataset(Dataset):
         self.mode = mode
         self.input_channels = input_channels
         self.transform = transform
-        # 【新增】多模态配置
         self.multimodal = multimodal
         self.ser_dir = ser_dir
         self.pe_dir = pe_dir
-        # 【新增】跨数据集测试模式
         self.cross_dataset_test = cross_dataset_test
         
         # 验证配置
@@ -210,7 +205,6 @@ class MAMAMIADataset(Dataset):
                 
                 seg_path = seg_files[0]  # 取第一个匹配的分割文件
                 
-                # 【修改】根据模式存储数据路径
                 if self.multimodal:
                     patient_data[patient_id] = {
                         't1_path': t1_path,
@@ -232,7 +226,6 @@ class MAMAMIADataset(Dataset):
                       val_ratio: float, seed: int) -> List[str]:
         """划分训练集、验证集、测试集"""
         
-        # 【新增】跨数据集测试模式：返回所有患者
         if self.cross_dataset_test:
             print(f"跨数据集测试模式：使用整个数据集的 {len(all_patients)} 名患者")
             return all_patients
@@ -266,7 +259,6 @@ class MAMAMIADataset(Dataset):
         if image.ndim == 4:  # 如果是4D [H, W, D, C]
             image = image[..., 0]  # 取第一个通道
         
-        # 【新增】多模态数据预处理
         if self.multimodal:
             if ser_image is None or pe_image is None:
                 raise ValueError("多模态模式下需要提供SER和PE图像")
@@ -284,7 +276,6 @@ class MAMAMIADataset(Dataset):
         if image.shape[0] != target_size[0] or image.shape[1] != target_size[1]:
             # 调整图像尺寸
             image = self._resize_3d(image, target_size)
-            # 【新增】调整多模态图像尺寸
             if self.multimodal:
                 ser_image = self._resize_3d(ser_image, target_size)
                 pe_image = self._resize_3d(pe_image, target_size)
@@ -293,7 +284,6 @@ class MAMAMIADataset(Dataset):
         
         # 归一化
         image = (image - image.mean()) / (image.std() + 1e-8)
-        # 【新增】多模态数据归一化
         if self.multimodal:
             ser_image = (ser_image - ser_image.mean()) / (ser_image.std() + 1e-8)
             pe_image = (pe_image - pe_image.mean()) / (pe_image.std() + 1e-8)
@@ -301,7 +291,6 @@ class MAMAMIADataset(Dataset):
         # 处理mask：二值化
         mask = (mask > 0).astype(np.float32)
         
-        # 【修改】根据模式调整通道维度
         if self.multimodal:
             # 堆叠多模态数据 [3, H, W, D]
             multi_modal_image = np.stack([image, ser_image, pe_image], axis=0)
@@ -353,7 +342,6 @@ class MAMAMIADataset(Dataset):
         image = self._load_nifti(patient_info['t1_path'])
         mask = self._load_nifti(patient_info['seg_path'])
         
-        # 【新增】加载多模态数据
         ser_image = None
         pe_image = None
         if self.multimodal:
@@ -375,7 +363,6 @@ class MAMAMIADataset(Dataset):
         
         return image, mask, meta
 
-# 【修改】适配UKAN模型的2D输入要求 - 增加平衡采样和数据增广
 class MAMAMIADataset2D(Dataset):
     """
     2D切片版本的数据集，用于与原有U-KAN模型兼容
@@ -393,21 +380,18 @@ class MAMAMIADataset2D(Dataset):
                  input_channels: int = 1,
                  transform=None,
                  seed: int = 42,
-                 # 【新增】多模态参数
                  multimodal: bool = False,
                  ser_dir: str = "",
                  pe_dir: str = "",
-                 # 【新增】跨数据集测试模式
                  cross_dataset_test: bool = False,
-                 # 【新增】平衡采样参数
                  balanced_sampling: bool = False):
         
         self.slice_axis = slice_axis
         self.multimodal = multimodal
         self.cross_dataset_test = cross_dataset_test
         self.mode = mode
-        self.transform = transform  # 【新增】保存transform参数
-        self.balanced_sampling = balanced_sampling  # 【新增】平衡采样标志
+        self.transform = transform  
+        self.balanced_sampling = balanced_sampling 
         
         self.original_dataset = MAMAMIADataset(
             data_dir=data_dir,
@@ -417,10 +401,10 @@ class MAMAMIADataset2D(Dataset):
             input_channels=input_channels,
             transform=transform,
             seed=seed,
-            multimodal=multimodal,  # 【新增】传递多模态参数
-            ser_dir=ser_dir,        # 【新增】传递SER路径
-            pe_dir=pe_dir,          # 【新增】传递PE路径
-            cross_dataset_test=cross_dataset_test  # 【新增】传递跨数据集测试参数
+            multimodal=multimodal,  
+            ser_dir=ser_dir,       
+            pe_dir=pe_dir,         
+            cross_dataset_test=cross_dataset_test 
         )
         
         # 预计算所有切片索引
@@ -439,7 +423,6 @@ class MAMAMIADataset2D(Dataset):
             for slice_idx in range(n_slices):
                 self.slice_indices.append((patient_idx, slice_idx))
         
-        # 【新增】计算切片权重（用于平衡采样）
         self.slice_weights = None
         if self.balanced_sampling and self.mode == "train":
             self._compute_slice_weights()
@@ -546,3 +529,4 @@ def save_prediction_as_nifti(prediction: np.ndarray, reference_nifti_path: str,
     
 
     print(f"Prediction saved: {output_file}")
+
