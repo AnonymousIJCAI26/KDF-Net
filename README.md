@@ -19,11 +19,11 @@ The framework achieves trustworthy AI in medical imaging through three key innov
 
 ## Execution Pipeline
 Step 1: Data Processing (Data processing/)
-  Dataset Analysis: Comprehensive analysis of the MAMA-MIA dataset (1,506 patients from DUKE, NACT, ISPY1, and ISPY2 cohorts)
+     Dataset Analysis: Comprehensive analysis of the MAMA-MIA dataset (1,506 patients from DUKE, NACT, ISPY1, and ISPY2 cohorts)
 
-  Knowledge-Guided Modality Synthesis: Generation of pharmacokinetic features (FTV_PE, FTV_SER) as explicit knowledge inputs
+     Knowledge-Guided Modality Synthesis: Generation of pharmacokinetic features (FTV_PE, FTV_SER) as explicit knowledge inputs
 
-  Output: Structured knowledge modalities ready for fusion with anatomical data
+     Output: Structured knowledge modalities ready for fusion with anatomical data
 
 Step 2: Model Implementation (Segmentation framework/)
   KDF-Net Architecture: Complete implementation of the knowledge-aware dynamic fusion model
