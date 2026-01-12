@@ -1,11 +1,10 @@
 """
-交叉验证测试脚本 - 支持所有baseline模型（修复导入问题版本）
+交叉验证测试脚本
 """
 
 import sys
 import os
 
-# ==================== 【重要修复】添加路径 ====================
 # 获取当前目录
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -23,7 +22,6 @@ print(f"Models directory: {models_dir}")
 print(f"Python search path (first 5):")
 for i, path in enumerate(sys.path[:5]):
     print(f"  {i+1}. {path}")
-# ==================== 【修复结束】 ====================
 
 import torch
 from torch import nn
@@ -47,7 +45,6 @@ from config_setting_mama_mia import MamaMiaConfig
 from mama_mia_loader import MAMAMIADataLoader
 from engine import test_one_epoch
 
-# ==================== 【动态导入模型函数】 ====================
 def import_model_module(module_name, class_name=None):
     """动态导入模型模块"""
     # 可能的导入路径
@@ -158,7 +155,6 @@ if any(baseline_models_status.values()):
     print("✅ Some baseline models are available")
 else:
     print("⚠️ No baseline models available")
-# ==================== 【导入结束】 ====================
 
 def print_memory_usage():
     """打印内存使用情况"""
@@ -428,7 +424,7 @@ def create_model_for_testing(saved_model_type, config, args):
     return model
 
 def calculate_metrics_3d(pred, target):
-    """计算3D分割指标 - 与test_mama_mia_ultralight_advanced.py保持一致"""
+    """计算3D分割指标"""
     eps = 1e-6
     
     # 确保是二值图像
@@ -1355,3 +1351,4 @@ def main():
 if __name__ == '__main__':
 
     main()
+
