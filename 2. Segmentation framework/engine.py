@@ -15,10 +15,7 @@ def train_one_epoch(train_loader,
                     logger, 
                     config, 
                     scaler=None):
-    '''
-    train model for one epoch - 适配MAMA-MIA数据集
-    【新增】显存优化版本：及时清理不需要的张量
-    '''
+
     # switch to train mode
     model.train() 
  
@@ -28,7 +25,6 @@ def train_one_epoch(train_loader,
     # 使用tqdm显示进度
     pbar = tqdm(total=total_iters, desc=f'Epoch {epoch} Training')
     
-    # 【新增】初始化梯度累积
     gradient_accumulation_steps = getattr(config, 'gradient_accumulation_steps', 1)
     accumulation_step = 0
     
@@ -46,20 +42,19 @@ def train_one_epoch(train_loader,
         if config.amp:
             with autocast():
                 out = model(images)
-                loss = criterion(out, targets) / gradient_accumulation_steps  # 【新增】梯度累积归一化
+                loss = criterion(out, targets) / gradient_accumulation_steps  
             scaler.scale(loss).backward()
         else:
             out = model(images)
-            loss = criterion(out, targets) / gradient_accumulation_steps  # 【新增】梯度累积归一化
+            loss = criterion(out, targets) / gradient_accumulation_steps  
             loss.backward()
         
-        # 【新增】立即释放不再需要的张量
         # 这些张量已经完成了前向传播和梯度计算
         del images, targets, out
         
         accumulation_step += 1
         
-        # 【新增】梯度累积：达到累积步数时更新参数
+
         if accumulation_step % gradient_accumulation_steps == 0:
             if config.amp:
                 scaler.step(optimizer)
@@ -67,23 +62,23 @@ def train_one_epoch(train_loader,
             else:
                 optimizer.step()
             
-            optimizer.zero_grad(set_to_none=True)  # 【新增】更彻底地清理梯度
+            optimizer.zero_grad(set_to_none=True)  
             accumulation_step = 0
             
-            # 【新增】定期清理CUDA缓存
+
             if iter % 20 == 0:
                 torch.cuda.empty_cache()
         
-        loss_list.append(loss.item() * gradient_accumulation_steps)  # 【修改】恢复原始loss值
+        loss_list.append(loss.item() * gradient_accumulation_steps) 
         
-        # 【新增】立即释放loss张量
+
         del loss
 
         # 更新进度条
         current_lr = optimizer.param_groups[0]['lr']
         avg_loss = np.mean(loss_list)
         
-        # 【新增】显示显存使用情况
+
         if torch.cuda.is_available() and iter % 10 == 0:
             memory_allocated = torch.cuda.memory_allocated() / 1024**3
             memory_reserved = torch.cuda.memory_reserved() / 1024**3
@@ -111,7 +106,7 @@ def train_one_epoch(train_loader,
             
     pbar.close()
     
-    # 【新增】每个epoch结束后强制清理显存
+
     torch.cuda.empty_cache()
     import gc
     gc.collect()
@@ -144,7 +139,7 @@ def val_one_epoch(test_loader,
             # 适配MAMA-MIA数据集格式
             if len(data) == 3:
                 img, msk, meta = data  # 忽略meta数据
-                del meta  # 【新增】立即释放meta
+                del meta  
             else:
                 img, msk = data
                 
@@ -162,11 +157,9 @@ def val_one_epoch(test_loader,
                 out = out[0]
             out_np = out.squeeze(1).cpu().detach().numpy()
             preds.append(out_np)
-            
-            # 【新增】清理GPU上的张量
+
             del img, msk, out
             
-            # 【新增】定期清理显存
             if i % 20 == 0:
                 torch.cuda.empty_cache()
                 
@@ -197,11 +190,9 @@ def val_one_epoch(test_loader,
     
     print(f'Confusion Matrix:\n{confusion}')
     
-    # 【新增】验证结束后清理
     del preds, gts, confusion
     torch.cuda.empty_cache()
     
-    # 【修改】返回avg_loss和dice分数
     return avg_loss, f1_or_dsc
 
 
@@ -286,5 +277,6 @@ def test_one_epoch(test_loader,
     logger.info(log_info)
     
     print(f'Confusion Matrix:\n{confusion}')
+
 
     return avg_loss
