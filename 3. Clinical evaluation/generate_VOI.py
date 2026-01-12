@@ -16,7 +16,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 class BreastCancerVOIExtractor:
-    """乳腺癌肿瘤VOI提取器 - 最终版本"""
+    """乳腺癌肿瘤VOI提取器"""
     
     def __init__(self, 
                  t1_root: str,
@@ -539,3 +539,4 @@ if __name__ == "__main__":
     else:
 
         print("请运行 test_single_patient() 函数测试单个患者")
+
