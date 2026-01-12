@@ -16,7 +16,6 @@ class MAMAMIAFTVAnalyzer:
         self.output_path = Path(output_path)
         self.output_path.mkdir(parents=True, exist_ok=True)
         
-        # FTV参数
         self.pe_threshold = 70
         self.ser_min = 0.9
         self.min_neighbor_count = 5
@@ -222,7 +221,7 @@ class MAMAMIAFTVAnalyzer:
     def generate_ftv_with_original_intensity(self, patient_id, output_path, ftv_pe_mask, 
                                            ftv_ser_mask, t1_data, affine, voxel_volume):
         """
-        【新增功能】生成带有原始信号强度的FTV图像
+        生成带有原始信号强度的FTV图像
         FTV区域保留T1时刻的原始信号值，非FTV区域设为0
         """
         try:
@@ -254,7 +253,7 @@ class MAMAMIAFTVAnalyzer:
     def _calculate_ftv_intensity_stats(self, patient_id, output_path, 
                                      ftv_pe_t1, ftv_ser_t1, t1_data, voxel_volume):
         """
-        【新增功能】计算FTV区域内的信号强度统计
+        计算FTV区域内的信号强度统计
         """
         try:
             # 创建FTV区域的布尔掩膜
@@ -304,7 +303,7 @@ class MAMAMIAFTVAnalyzer:
                                          pe_early, ser_map, ftv_pe, ftv_ser, 
                                          tissue_mask, patient_id, voxel_volume):
         """
-        创建独立的可视化图表 - 避免布局警告，提供更清晰的可视化
+        创建独立的可视化图表
         """
         patient_output_path = self.output_path / patient_id
         patient_output_path.mkdir(exist_ok=True)
@@ -719,7 +718,6 @@ class MAMAMIAFTVAnalyzer:
                 img = nib.Nifti1Image(data, affine)
                 nib.save(img, patient_output_path / f"{patient_folder}_{name}.nii.gz")
             
-            # 【新增功能】生成带原始信号值的FTV图像
             # 使用S1数据（T1时刻，早期增强相位）作为原始信号
             self.generate_ftv_with_original_intensity(
                 patient_folder, patient_output_path, 
@@ -848,4 +846,5 @@ if __name__ == "__main__":
     success_count = analyzer.process_all_patients()
     
     print(f"分析完成! 成功处理 {success_count} 个患者")
+
     print(f"结果保存在: {output_path}")
