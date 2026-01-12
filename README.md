@@ -24,17 +24,12 @@ Step 1: Data Processing (Data processing/)
 - Output: Structured knowledge modalities ready for fusion with anatomical data
 
 Step 2: Model Implementation (Segmentation framework/)
-  KDF-Net Architecture: Complete implementation of the knowledge-aware dynamic fusion model
-
-  Backbone Networks: Feature extraction components for anatomical information
-
-  Dynamic Cross-modal Synergy Module: Lightweight fusion mechanism for adaptive knowledge integration
+- KDF-Net Architecture: Complete implementation of the knowledge-aware dynamic fusion model
+- Backbone Networks: Feature extraction components for anatomical information
+- Dynamic Cross-modal Synergy Module: Lightweight fusion mechanism for adaptive knowledge integration
 
 Step 3: Clinical Evaluation (Clinical_evaluation/)
-  Tumor VOI Generation: Extraction of Volumes of Interest for clinical validation studies
-
-  Clinical Report Generation: Automated generation of structured diagnostic reports
-
-  Training Framework: Full 5-fold cross-validation with closed-loop pCR prediction
-
-  Interpretability Analysis: Tools for visualizing attention maps aligned with clinical reasoning
+- Tumor VOI Generation: Extraction of Volumes of Interest for clinical validation studies
+- Clinical Report Generation: Automated generation of structured diagnostic reports
+- Training Framework: Full 5-fold cross-validation with closed-loop pCR prediction
+- Interpretability Analysis: Tools for visualizing attention maps aligned with clinical reasoning
